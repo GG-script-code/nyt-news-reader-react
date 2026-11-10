@@ -8,7 +8,7 @@ A React single-page application that reimagines The New York Times home page: li
 
 ## Live demo
 
-🔗 [https://nyt-news-reader-react.netlify.app/y](https://nyt-news-reader-react.netlify.app/) 
+🔗 [https://nyt-news-reader-react.netlify.app/](https://nyt-news-reader-react.netlify.app/) 
 
 ## Features
 
