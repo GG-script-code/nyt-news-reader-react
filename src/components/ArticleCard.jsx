@@ -8,8 +8,8 @@ import { getBestImage, truncate } from '../utils/formatters';
  * @param {string} variant  - 'hero' | 'default' | 'compact'
  */
 export default function ArticleCard({ article, variant = 'default' }) {
-  const image = getBestImage(article.multimedia);
-  const imageUrl = image ? `https://www.nytimes.com/${image}` : null;
+  // getBestImage restituisce già l'URL completo (relativo o assoluto)
+  const imageUrl = getBestImage(article.multimedia);
 
   return (
     <article className={`${styles.card} ${styles[variant]}`}>
@@ -23,18 +23,22 @@ export default function ArticleCard({ article, variant = 'default' }) {
           />
         </div>
       )}
+
       <div className={styles.content}>
         {article.section && (
           <span className={styles.section}>{article.section}</span>
         )}
+
         <h2 className={styles.title}>
           <a href={article.url} target="_blank" rel="noopener noreferrer">
             {article.title}
           </a>
         </h2>
+
         {article.abstract && variant !== 'compact' && (
           <p className={styles.abstract}>{truncate(article.abstract, 180)}</p>
         )}
+
         {article.byline && (
           <span className={styles.byline}>{article.byline}</span>
         )}

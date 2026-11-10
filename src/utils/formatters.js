@@ -23,16 +23,33 @@ export function truncate(text, maxLength = 160) {
 }
 
 /**
- * Estrae l'URL dell'immagine migliore da un oggetto `multimedia` del NYT.
- * Prova prima `superJumbo`, poi `jumbo`, poi il primo disponibile.
+ * Estrae l'URL completo dell'immagine migliore da un oggetto `multimedia` del NYT.
+ * Gestisce sia URL relativi (Top Stories) che URL assoluti (Article Search).
  * Ritorna null se non c'è multimedia.
  */
 export function getBestImage(multimedia) {
   if (!Array.isArray(multimedia) || multimedia.length === 0) return null;
+  
   const preferred = ['superJumbo', 'jumbo', 'xlarge', 'large'];
+  let url = null;
+
   for (const format of preferred) {
     const found = multimedia.find((m) => m.format === format);
-    if (found) return found.url;
+    if (found) {
+      url = found.url;
+      break;
+    }
   }
-  return multimedia[0].url;
+
+  // Fallback: prendi il primo disponibile se nessun formato preferito è stato trovato
+  if (!url) {
+    url = multimedia[0].url;
+  }
+
+  // Se l'URL è già assoluto (inizia con http), restituiscilo così com'è.
+  // Se è relativo, prefissalo con il dominio del NYT.
+  if (url.startsWith('http')) {
+    return url;
+  }
+  return `https://www.nytimes.com/${url}`;
 }
