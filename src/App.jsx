@@ -3,10 +3,12 @@ import HomePage from './pages/HomePage';
 import SectionPage from './pages/SectionPage';
 import SearchPage from './pages/SearchPage';
 import Navbar from './components/Navbar';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <header
         style={{
           textAlign: 'center',

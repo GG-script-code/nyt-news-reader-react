@@ -3,6 +3,7 @@ import { searchArticles } from '../services/nytApi';
 import NewsGrid from '../components/NewsGrid';
 import Loader from '../components/Loader';
 import ErrorState from '../components/ErrorState';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 export default function SearchPage() {
   const [query, setQuery] = useState('');
@@ -13,6 +14,8 @@ export default function SearchPage() {
 
   async function handleSubmit(e) {
     e.preventDefault(); // previene il reload della pagina
+
+    useDocumentTitle('Cerca');
 
     const trimmed = query.trim();
     if (!trimmed) return;

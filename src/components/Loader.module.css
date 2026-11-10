@@ -1,6 +1,6 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(12, 1fr);
   gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -11,6 +11,23 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+/* Hero: 8 colonne */
+.skeleton.hero {
+  grid-column: span 8;
+}
+
+/* Sidebar: 4 colonne, 2 elementi impilati */
+.skeleton.side {
+  grid-column: span 4;
+}
+
+/* Card: 4 colonne ciascuna */
+.skeleton.card {
+  grid-column: span 4;
 }
 
 .image,
@@ -23,14 +40,23 @@
   border-radius: 2px;
 }
 
-.image {
+.skeleton.hero .image {
   width: 100%;
   aspect-ratio: 16 / 9;
+}
+
+.skeleton.card .image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
 }
 
 .title {
   height: 1.5rem;
   width: 90%;
+}
+
+.skeleton.hero .title {
+  height: 2.5rem;
 }
 
 .titleShort {
@@ -48,9 +74,20 @@
   100% { background-position: -200% 0; }
 }
 
+@media (max-width: 1024px) {
+  .skeleton.hero { grid-column: span 12; }
+  .skeleton.side { grid-column: span 12; }
+  .skeleton.card { grid-column: span 6; }
+}
+
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
     padding: 1rem;
+  }
+  .skeleton.hero,
+  .skeleton.side,
+  .skeleton.card {
+    grid-column: span 1;
   }
 }

@@ -1,50 +1,32 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNews } from '../context/NewsContext';
-import { getTopStories } from '../services/nytApi';
 import NewsGrid from '../components/NewsGrid';
 import Loader from '../components/Loader';
 import ErrorState from '../components/ErrorState';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 export default function SectionPage() {
   const { section } = useParams();
-  const { state, dispatch } = useNews();
+  const { state, fetchSection } = useNews();
   const { articles, loading, error } = state;
 
+  const formatted = section.charAt(0).toUpperCase() + section.slice(1);
+  useDocumentTitle(formatted);
+
   useEffect(() => {
-    let cancelled = false;
-
-    async function fetchData() {
-      dispatch({ type: 'FETCH_START' });
-      try {
-        const { data } = await getTopStories(section);
-        if (!cancelled) {
-          dispatch({ type: 'FETCH_SUCCESS', payload: data.results || [] });
-        }
-      } catch (err) {
-        if (!cancelled) {
-          const message =
-            err.response?.data?.message || 'Errore nel caricamento.';
-          dispatch({ type: 'FETCH_ERROR', payload: message });
-        }
-      }
-    }
-
-    fetchData();
-    return () => { cancelled = true; };
-  }, [section, dispatch]);
+    fetchSection(section);
+  }, [section, fetchSection]);
 
   if (loading) return <Loader />;
-  if (error)
-    return (
-      <ErrorState message={error} onRetry={() => window.location.reload()} />
-    );
-  if (articles.length === 0)
+  if (error) return <ErrorState message={error} onRetry={() => fetchSection(section)} />;
+  if (articles.length === 0) {
     return (
       <p style={{ textAlign: 'center', margin: '4rem 0', color: '#666' }}>
         Nessun articolo disponibile per questa sezione.
       </p>
     );
+  }
 
   return <NewsGrid articles={articles} />;
 }
