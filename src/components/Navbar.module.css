@@ -1,0 +1,32 @@
+.nav {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #121212;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: #c8102e;
+}
+
+.active {
+  color: #c8102e;
+  font-weight: 700;
+  border-bottom-color: #c8102e;
+}
