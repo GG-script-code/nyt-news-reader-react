@@ -1,0 +1,52 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.heroCol {
+  grid-column: span 8;
+}
+
+.sideCol {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-left: 1px solid #e2e2e2;
+  padding-left: 2rem;
+}
+
+.cardCol {
+  grid-column: span 4;
+}
+
+@media (max-width: 1024px) {
+  .heroCol { grid-column: span 12; }
+  .sideCol {
+    grid-column: span 12;
+    border-left: none;
+    padding-left: 0;
+    flex-direction: row;
+  }
+  .cardCol { grid-column: span 6; }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  .heroCol,
+  .sideCol,
+  .cardCol {
+    grid-column: span 1;
+  }
+  .sideCol {
+    flex-direction: column;
+  }
+}

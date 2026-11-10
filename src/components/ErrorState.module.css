@@ -1,0 +1,35 @@
+.wrapper {
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid #e2e2e2;
+  border-top: 4px solid #c8102e;
+}
+
+.title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #121212;
+}
+
+.message {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.button {
+  background: #121212;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button:hover {
+  background: #c8102e;
+}

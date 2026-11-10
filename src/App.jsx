@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { useNews } from './context/NewsContext';
 import { getTopStories } from './services/nytApi';
+import NewsGrid from './components/NewsGrid';
+import Loader from './components/Loader';
+import ErrorState from './components/ErrorState';
+
+const SECTIONS = ['home', 'world', 'technology', 'science', 'arts'];
 
 function App() {
   const { state, dispatch } = useNews();
@@ -28,50 +33,83 @@ function App() {
     }
 
     fetchData();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [section, dispatch]);
 
-  function changeSection(newSection) {
-    dispatch({ type: 'SET_SECTION', payload: newSection });
-  }
-
-  if (loading) return <p>Caricamento in corso...</p>;
-
-  if (error) {
-    return (
-      <div>
-        <p>{error}</p>
-        <button onClick={() => changeSection(section)}>Riprova</button>
-      </div>
-    );
+  function retry() {
+    dispatch({ type: 'FETCH_START' });
+    getTopStories(section)
+      .then(({ data }) =>
+        dispatch({ type: 'FETCH_SUCCESS', payload: data.results || [] })
+      )
+      .catch((err) =>
+        dispatch({
+          type: 'FETCH_ERROR',
+          payload:
+            err.response?.data?.message ||
+            'Errore nel caricamento delle notizie.',
+        })
+      );
   }
 
   return (
-    <div>
-      <h1>NYT News Reader</h1>
-      <p>Sezione attiva: <strong>{section}</strong></p>
-      <div>
-        {['home', 'world', 'technology', 'science'].map((s) => (
-          <button
-            key={s}
-            onClick={() => changeSection(s)}
-            style={{ marginRight: '0.5rem' }}
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-      <p>Articoli caricati: {articles.length}</p>
-      <ul>
-        {articles.slice(0, 5).map((article) => (
-          <li key={article.url}>
-            <strong>{article.title}</strong>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <header style={{ borderBottom: '1px solid #e2e2e2', padding: '1rem 2rem' }}>
+        <h1
+          style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: '2rem',
+            textAlign: 'center',
+            marginBottom: '1rem',
+          }}
+        >
+          NYT News Reader
+        </h1>
+        <nav
+          style={{
+            display: 'flex',
+            gap: '1.5rem',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          {SECTIONS.map((s) => (
+            <button
+              key={s}
+              onClick={() => dispatch({ type: 'SET_SECTION', payload: s })}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: section === s ? '#c8102e' : '#121212',
+                fontWeight: section === s ? 700 : 400,
+                padding: '0.25rem 0',
+                borderBottom:
+                  section === s ? '2px solid #c8102e' : '2px solid transparent',
+              }}
+            >
+              {s}
+            </button>
+          ))}
+        </nav>
+      </header>
+
+      <main>
+        {loading && <Loader />}
+        {error && <ErrorState message={error} onRetry={retry} />}
+        {!loading && !error && articles.length === 0 && (
+          <p style={{ textAlign: 'center', margin: '4rem 0', color: '#666' }}>
+            Nessun articolo disponibile per questa sezione.
+          </p>
+        )}
+        {!loading && !error && articles.length > 0 && (
+          <NewsGrid articles={articles} />
+        )}
+      </main>
+    </>
   );
 }
 
